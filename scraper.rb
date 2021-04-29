@@ -19,5 +19,5 @@ DA_set.each do |row|
 	record['date_scraped'] = Date.today.to_s
 	#There doesn't seem to be any info urls on the council site :'(
 	ScraperWiki.save_sqlite(['council_reference'], record)
-	puts "Saving" + record['council_reference']
+	puts "Saving " + record['council_reference']
 end
