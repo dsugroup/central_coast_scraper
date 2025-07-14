@@ -9,9 +9,7 @@ page = agent.get(base_url)
 
 DA_set = page.search("table#tablefield-paragraphs_item-2193-field_p_table-0/tbody/tr")
 
-# 🏡 Your target suburbs
-target_suburbs = ['Wadalba', 'Warnervale', 'Bonnells Bay', 'Watanobbi', 'Cooranbong']
-# 🧠 Keywords indicating potential land release
+# 🧠 Keywords to filter relevant development applications
 keywords = ['subdivision', 'rezoning', 'boundary adjustment', 'land clearing', 'urban release']
 
 DA_set.each do |row|
@@ -23,13 +21,10 @@ DA_set.each do |row|
   record['description'] = rowSet[4].text.gsub("&amp;", "&")
   record['date_scraped'] = Date.today.to_s
 
-  address = record['address'].downcase
   description = record['description'].downcase
-
-  suburb_match = target_suburbs.any? { |suburb| address.include?(suburb.downcase) }
   keyword_match = keywords.any? { |word| description.include?(word.downcase) }
 
-  if suburb_match && keyword_match
+  if keyword_match
     ScraperWiki.save_sqlite(['council_reference'], record)
     puts "✅ Saved match: #{record['council_reference']}"
   else
